@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-import random
+import secrets
 
 
 # Reworked so this matches gluPerspective / glm::perspective, using fovy
@@ -140,8 +140,8 @@ def resize_and_center_image(image_tensor, scale=0.95, c = 0, shift = 0, rgb=Fals
         background[:, :, start_y:start_y + new_H, start_x:start_x + new_W] = resized_image
     else:
         for i in range(B):
-            randx = random.randint(-shift, shift)
-            randy = random.randint(-shift, shift)   
+            randx = secrets.SystemRandom().randint(-shift, shift)
+            randy = secrets.SystemRandom().randint(-shift, shift)   
             if rgb == True:
                 if i == 0 or i==2 or i==4:
                     randx = 0
@@ -151,7 +151,7 @@ def resize_and_center_image(image_tensor, scale=0.95, c = 0, shift = 0, rgb=Fals
         return background  
     for i in range(B):
         for j in range(C):
-            background[i, j, :, :] += (random.random() - 0.5)*2 * aug_shift / 255
+            background[i, j, :, :] += (secrets.SystemRandom().random() - 0.5)*2 * aug_shift / 255
     return background 
                                
 def get_tri(triview_color, dim = 1, blender=True, c = 0, scale=0.95, shift = 0, fix = False, rgb=False, aug_shift = 0):

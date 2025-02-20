@@ -24,15 +24,15 @@
 
 
 import os
-import random
 
 import numpy as np
 import torch
 from diffusers import AutoPipelineForText2Image
+import secrets
 
 
 def seed_everything(seed):
-    random.seed(seed)
+    secrets.SystemRandom().seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     os.environ["PL_GLOBAL_SEED"] = str(seed)

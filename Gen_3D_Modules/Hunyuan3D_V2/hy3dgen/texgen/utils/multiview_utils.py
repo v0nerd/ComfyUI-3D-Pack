@@ -23,12 +23,12 @@
 # by Tencent in accordance with TENCENT HUNYUAN COMMUNITY LICENSE AGREEMENT.
 
 import os
-import random
 
 import numpy as np
 import torch
 from diffusers import DiffusionPipeline
 from diffusers import EulerAncestralDiscreteScheduler
+import secrets
 
 
 class Multiview_Diffusion_Net():
@@ -51,7 +51,7 @@ class Multiview_Diffusion_Net():
         self.pipeline = pipeline.to(self.device)
 
     def seed_everything(self, seed):
-        random.seed(seed)
+        secrets.SystemRandom().seed(seed)
         np.random.seed(seed)
         torch.manual_seed(seed)
         os.environ["PL_GLOBAL_SEED"] = str(seed)

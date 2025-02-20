@@ -9,13 +9,13 @@ from PIL import Image
 from torchvision import transforms
 from einops import rearrange
 from typing import Literal, Tuple, Optional, Any
-import random
 
 import json
 import os, sys
 import math
 
 from .normal_utils import trans_normal, normal2img, img2normal
+import secrets
 
 
 class ObjaverseDataset(Dataset):
@@ -153,7 +153,7 @@ class ObjaverseDataset(Dataset):
             white = np.array([1., 1., 1.], dtype=np.float32)
             black = np.array([0., 0., 0.], dtype=np.float32)
             gray = np.array([0.5, 0.5, 0.5], dtype=np.float32)
-            bg_color = random.choice([white, black, gray])
+            bg_color = secrets.choice([white, black, gray])
         elif isinstance(self.bg_color, float):
             bg_color = np.array([self.bg_color] * 3, dtype=np.float32)
         else:
@@ -275,19 +275,19 @@ class ObjaverseDataset(Dataset):
     def __getitem_mix__(self, index, debug_object=None):
         if debug_object is not None:
             object_name =  debug_object #
-            set_idx = random.sample(range(0, self.groups_num), 1)[0] # without replacement
+            set_idx = secrets.SystemRandom().sample(range(0, self.groups_num), 1)[0] # without replacement
         else:
             object_name = self.all_objects[index%len(self.all_objects)]
             set_idx = 0
 
         if self.augment_data:
-            cond_view = random.sample(self.view_types, k=1)[0]
+            cond_view = secrets.SystemRandom().sample(self.view_types, k=1)[0]
         else:
             cond_view = 'front'
 
 
         # ! if you would like predict depth; modify here
-        if random.random() < 0.5:
+        if secrets.SystemRandom().random() < 0.5:
             read_color, read_normal, read_depth = True, False, False
         else:
             read_color, read_normal, read_depth = False, True, False
@@ -381,13 +381,13 @@ class ObjaverseDataset(Dataset):
     def __getitem_joint__(self, index, debug_object=None):
         if debug_object is not  None:
             object_name =  debug_object #
-            set_idx = random.sample(range(0, self.groups_num), 1)[0] # without replacement
+            set_idx = secrets.SystemRandom().sample(range(0, self.groups_num), 1)[0] # without replacement
         else:
             object_name = self.all_objects[index%len(self.all_objects)]
             set_idx = 0
 
         if self.augment_data:
-            cond_view = random.sample(self.view_types, k=1)[0]
+            cond_view = secrets.SystemRandom().sample(self.view_types, k=1)[0]
         else:
             cond_view = 'front'
 
@@ -487,7 +487,7 @@ class ConcatDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, i):
 
-        chosen = random.choices(self.datasets, self.weights, k=1)[0]
+        chosen = secrets.SystemRandom().choices(self.datasets, self.weights, k=1)[0]
         return chosen[i]
 
     def __len__(self):

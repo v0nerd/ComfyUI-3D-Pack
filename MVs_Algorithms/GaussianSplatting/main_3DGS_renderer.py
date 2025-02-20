@@ -1,5 +1,4 @@
 import math
-import random
 import numpy as np
 from torchtyping import TensorType
 from plyfile import PlyData, PlyElement
@@ -17,6 +16,7 @@ from kiui.op import inverse_sigmoid
 from shared_utils.sh_utils import eval_sh, SH2RGB, RGB2SH
 from mesh_processer.mesh import Mesh, PointCloud
 from mesh_processer.mesh_utils import construct_list_of_gs_attributes, write_gs_ply, read_gs_ply, K_nearest_neighbors_func
+import secrets
 
 def get_expon_lr_func(
     lr_init, lr_final, lr_delay_steps=0, lr_delay_mult=1.0, max_steps=1000000
@@ -120,8 +120,8 @@ def random_point_in_triangle(v0, v1, v2):
     https://stackoverflow.com/questions/47410054/generate-random-locations-within-a-triangular-domain
     """
     
-    r1 = random.random()
-    r2 = random.random()
+    r1 = secrets.SystemRandom().random()
+    r2 = secrets.SystemRandom().random()
 
     s1 = math.sqrt(r1)
     return v0 * (1.0 - s1) + v1 * (1.0 - r2) * s1 + v2 * r2 * s1#

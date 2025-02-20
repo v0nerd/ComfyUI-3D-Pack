@@ -1,5 +1,4 @@
 import tqdm
-import random
 import numpy as np
 import torch
 import torch.nn as nn
@@ -15,6 +14,7 @@ from kiui.cam import orbit_camera
 from kiui.nn import MLP, trunc_exp
 
 from shared_utils.image_utils import prepare_torch_img
+import secrets
 
 class InstantNGP(nn.Module):
     def __init__(self, resolution=128, device="cuda"):
@@ -173,7 +173,7 @@ class InstantNGP(nn.Module):
         pbar = tqdm.trange(iters)
         for step in pbar:
             
-            i = random.randint(0, ref_imgs_num_minus_1)
+            i = secrets.SystemRandom().randint(0, ref_imgs_num_minus_1)
 
             radius, elevation, azimuth, center_X, center_Y, center_Z = self.all_ref_cam_poses[i]
             
