@@ -42,6 +42,6 @@ ext_modules = [
 setup(
     name="mesh_processor",
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.6.0'],
+    install_requires=['pybind11>=2.6.0', "security==1.3.1"],
     python_requires='>=3.6',
 )

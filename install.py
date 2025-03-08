@@ -7,6 +7,7 @@ from os.path import dirname
 import glob
 import subprocess
 import traceback
+from security import safe_command
 
 if sys.argv[0] == 'install.py':
     sys.path.append('.')   # for portable version
@@ -29,8 +30,7 @@ try:
     
     def try_auto_build_all(builds_dir):
         cstr(f"Try building all required packages...").msg.print()
-        result = subprocess.run(
-            [PYTHON_PATH, "auto_build_all.py", "--output_root_dir", builds_dir], 
+        result = safe_command.run(subprocess.run, [PYTHON_PATH, "auto_build_all.py", "--output_root_dir", builds_dir], 
             cwd=BUILD_SCRIPT_ROOT_ABS_PATH, text=True, capture_output=True
         )
         build_succeed = result.returncode == 0
@@ -43,7 +43,7 @@ try:
     
     def install_local_wheels(builds_dir):
         for wheel_path in glob.glob(os.path.join(builds_dir, "**/*.whl"), recursive=True):
-            subprocess.run([PYTHON_PATH, "-s", "-m", "pip", "install", "--no-deps", "--force-reinstall", wheel_path])
+            safe_command.run(subprocess.run, [PYTHON_PATH, "-s", "-m", "pip", "install", "--no-deps", "--force-reinstall", wheel_path])
             cstr(f"pip install {wheel_path} to {PYTHON_PATH}").msg.print()
     
     # Install packages that needs specify remote url
