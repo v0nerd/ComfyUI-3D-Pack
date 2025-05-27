@@ -7,12 +7,12 @@ from typing import Literal, Tuple, Optional, Any
 import glob
 import os
 import json
-import random
 import cv2
 import math
 import numpy as np
 import torch
 from PIL import Image
+import secrets
 
 
 class MVDiffusionDatasetV1(Dataset):
@@ -91,12 +91,12 @@ class MVDiffusionDatasetV1(Dataset):
 
         # random a set of 4 views
         # the data is arranged in ascending order of the azimuth angle
-        group_ids = random.sample(range(num_groups), k=2)
+        group_ids = secrets.SystemRandom().sample(range(num_groups), k=2)
         cond_group_id, tgt_group_id = group_ids
-        cond_location = meta['locations'][cond_group_id * self.num_views + random.randint(0, self.num_views - 1)]
+        cond_location = meta['locations'][cond_group_id * self.num_views + secrets.SystemRandom().randint(0, self.num_views - 1)]
         tgt_locations = meta['locations'][tgt_group_id * self.num_views : tgt_group_id * self.num_views + self.num_views]
         # random an order
-        start_id = random.randint(0, self.num_views - 1)
+        start_id = secrets.SystemRandom().randint(0, self.num_views - 1)
         tgt_locations = tgt_locations[start_id:] + tgt_locations[:start_id]
         
         cond_elevation = cond_location['elevation']

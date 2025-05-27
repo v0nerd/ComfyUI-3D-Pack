@@ -2,8 +2,6 @@ import math
 import os
 import json
 from dataclasses import dataclass, field
-
-import random
 import imageio
 import numpy as np
 import pytorch_lightning as pl
@@ -18,6 +16,7 @@ from craftsman import register
 from craftsman.utils.base import Updateable
 from craftsman.utils.config import parse_structured
 from craftsman.utils.typing import *
+import secrets
 
 def rot2eul(R):
     beta = -np.arcsin(R[2,0])
@@ -184,7 +183,7 @@ class ObjaverseDataset(Dataset):
         ret = {}
         if self.cfg.image_type == "rgb" or self.cfg.image_type == "normal":
             assert self.cfg.n_views == 1, "Only single view is supported for single image"
-            sel_idx = random.choice(self.cfg.idx)
+            sel_idx = secrets.choice(self.cfg.idx)
             ret["sel_image_idx"] = sel_idx
             if self.cfg.image_type == "rgb":
                 img_path = f'{self.cfg.image_data_path}/' + "/".join(self.uids[index].split('/')[-2:]) + f"/{sel_idx}.png"
@@ -193,7 +192,7 @@ class ObjaverseDataset(Dataset):
             ret["image"] = _load_single_image(img_path)
             ret["c2w"] = self.camera_embedding[sel_idx % 4]
         elif self.cfg.image_type == "mvrgb" or self.cfg.image_type == "mvnormal":
-            sel_idx = random.choice(self.cfg.idx)
+            sel_idx = secrets.choice(self.cfg.idx)
             ret["sel_image_idx"] = sel_idx
             mvimages = []
             for i in range(self.cfg.n_views):
@@ -214,7 +213,7 @@ class ObjaverseDataset(Dataset):
         if self.cfg.caption_type == "text":
             caption = eval(json.load(open(f'{self.cfg.image_data_path}/' + "/".join(self.uids[index].split('/')[-2:]) + f'/annotation.json')))
             texts = [v for k, v in caption.items()]
-            sel_idx = random.randint(0, len(texts) - 1)
+            sel_idx = secrets.SystemRandom().randint(0, len(texts) - 1)
             ret["sel_caption_idx"] = sel_idx
             ret['text_input_ids'] = self.tokenizer(
                 texts[sel_idx] if not drop_text_embed else "",

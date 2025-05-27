@@ -13,7 +13,7 @@ import torch
 import sys
 from datetime import datetime
 import numpy as np
-import random
+import secrets
 
 def inverse_sigmoid(x):
     return torch.log(x/(1-x))
@@ -127,7 +127,7 @@ def safe_state(silent):
 
     sys.stdout = F(silent)
 
-    random.seed(0)
+    secrets.SystemRandom().seed(0)
     np.random.seed(0)
     torch.manual_seed(0)
     torch.cuda.set_device(torch.device("cuda:0"))

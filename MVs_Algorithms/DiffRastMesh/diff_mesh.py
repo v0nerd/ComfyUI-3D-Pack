@@ -1,4 +1,3 @@
-import random
 import tqdm
 
 import torch
@@ -14,6 +13,7 @@ from .diff_mesh_renderer import DiffRastRenderer
 
 from shared_utils.camera_utils import BaseCameraController
 from shared_utils.image_utils import prepare_torch_img
+import secrets
 
 class DiffMeshCameraController(BaseCameraController):
     
@@ -99,7 +99,7 @@ class DiffMesh:
             masked_ref_img_batch = []
             for _ in range(self.batch_size):
                 
-                i = random.randint(0, ref_imgs_num_minus_1)
+                i = secrets.SystemRandom().randint(0, ref_imgs_num_minus_1)
 
                 out = self.cam_controller.render_at_pose(self.all_ref_cam_poses[i])                
 

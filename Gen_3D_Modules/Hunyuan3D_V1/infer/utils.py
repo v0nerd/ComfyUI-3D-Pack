@@ -22,16 +22,16 @@
 
 import os
 import time
-import random
 import numpy as np
 import torch
 from functools import wraps
+import secrets
 
 def seed_everything(seed):
     '''
         seed everthing
     '''
-    random.seed(seed)
+    secrets.SystemRandom().seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     os.environ["PL_GLOBAL_SEED"] = str(seed)

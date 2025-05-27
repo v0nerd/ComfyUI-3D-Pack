@@ -1,4 +1,3 @@
-import random
 import tqdm
 
 import torch
@@ -11,6 +10,7 @@ from .main_3DGS_renderer import GaussianSplattingRenderer
 
 from shared_utils.camera_utils import BaseCameraController, MiniCam, calculate_fovX, get_projection_matrix
 from shared_utils.image_utils import prepare_torch_img
+import secrets
 
 class GSParams:
     def __init__(
@@ -158,7 +158,7 @@ class GaussianSplatting3D:
             for _ in range(self.gs_params.batch_size):
                 ### calculate loss between reference and rendered image from known view
                     
-                i = random.randint(0, ref_imgs_num_minus_1)
+                i = secrets.SystemRandom().randint(0, ref_imgs_num_minus_1)
                 
                 out = self.cam_controller.render_at_pose(self.all_ref_cam_poses[i])
                 

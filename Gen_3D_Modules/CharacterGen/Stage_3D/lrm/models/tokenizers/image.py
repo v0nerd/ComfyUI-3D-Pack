@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-import random
 
 import torch
 import torch.nn as nn
@@ -9,6 +8,7 @@ from ...utils.base import BaseModule
 from .dinov2 import Dinov2Model, CustomEmbeddings
 from ..transformers.attention import Modulation
 from ...utils.typing import *
+import secrets
 
 
 class NaiveImageTokenizer(BaseModule):
@@ -147,7 +147,7 @@ class DINOV2SingleImageTokenizer(BaseModule):
         if (
             self.training
             and self.cfg.drop_rate > 0
-            and random.random() < self.cfg.drop_rate
+            and secrets.SystemRandom().random() < self.cfg.drop_rate
         ):
             if self.cfg.drop_type == "all_but_first":
                 drop_func = lambda x: x if x is None else x[:, 0:1]

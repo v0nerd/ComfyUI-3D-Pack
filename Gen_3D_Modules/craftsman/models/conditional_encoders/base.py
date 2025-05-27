@@ -1,4 +1,3 @@
-import random
 import torch
 import torch.nn as nn
 import numpy as np
@@ -14,6 +13,7 @@ from typing import Iterable, Optional, Union, List
 
 from craftsman.utils.base import BaseModule
 from craftsman.utils.typing import *
+import secrets
 
 ImageType = Union[np.ndarray, torch.Tensor, Image.Image]
 
@@ -104,7 +104,7 @@ class BaseEmbedder(BaseModule):
 
         text_embeds, visual_embeds = None, None
         
-        if random.random() < self.cfg.empty_embeds_ratio:
+        if secrets.SystemRandom().random() < self.cfg.empty_embeds_ratio:
             if "text_input_ids" in batch or "text_embeds" in batch:
                 if self.empty_text_embeds is None:
                     if not self.cfg.zero_uncond_embeds:

@@ -1,6 +1,4 @@
 import importlib
-
-import random
 import torch
 import numpy as np
 from collections import abc
@@ -11,6 +9,7 @@ from queue import Queue
 
 from inspect import isfunction
 from PIL import Image, ImageDraw, ImageFont
+import secrets
 
 
 def log_txt_as_img(wh, xc, size=10):
@@ -211,7 +210,7 @@ def parallel_data_prefetch(
         return gather_res
 
 def set_seed(seed=None):
-    random.seed(seed)
+    secrets.SystemRandom().seed(seed)
     np.random.seed(seed)
     if seed is not None:
         torch.manual_seed(seed)

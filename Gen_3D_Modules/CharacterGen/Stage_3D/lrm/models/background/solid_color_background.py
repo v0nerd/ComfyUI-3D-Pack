@@ -1,4 +1,3 @@
-import random
 from dataclasses import dataclass
 
 import torch
@@ -6,6 +5,7 @@ import torch.nn as nn
 
 from .base import BaseBackground
 from ...utils.typing import *
+import secrets
 
 
 class SolidColorBackground(BaseBackground):
@@ -41,7 +41,7 @@ class SolidColorBackground(BaseBackground):
         if (
             self.training
             and self.cfg.random_aug
-            and random.random() < self.cfg.random_aug_prob
+            and secrets.SystemRandom().random() < self.cfg.random_aug_prob
         ):
             # use random background color with probability random_aug_prob
             # color = color * 0 + (
