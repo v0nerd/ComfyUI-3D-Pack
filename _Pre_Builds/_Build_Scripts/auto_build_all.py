@@ -4,6 +4,7 @@ from os.path import dirname
 import subprocess
 import re
 import time
+from security import safe_command
 
 BUILD_SCRIPT_ROOT_ABS_PATH = dirname(__file__)
 sys.path.append(BUILD_SCRIPT_ROOT_ABS_PATH)
@@ -46,7 +47,7 @@ def get_dependency_dir(dependency):
 def setup_build_env():
     # Set CMake argumens fo build packages based on CUDA
     os.environ["CMAKE_ARGS"] = "-DBUILD_opencv_world=ON -DWITH_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_CUBLAS=ON -DCUDA_ARCH_PTX=9.0 -DWITH_NVCUVID=ON"
-    subprocess.run([PYTHON_PATH, "-s", "-m", "pip", "install", "-r", BUILD_REQUIREMENTS_FILE_ABS_PATH])
+    safe_command.run(subprocess.run, [PYTHON_PATH, "-s", "-m", "pip", "install", "-r", BUILD_REQUIREMENTS_FILE_ABS_PATH])
     
     install_remote_packages(build_config.build_base_packages)
 
@@ -62,7 +63,7 @@ def build_python_wheel(dependency_dir, output_dir):
     # Build wheel and move the wheel file we just built to the output directory
     print(f"Building {dependency_dir}")
     
-    result = subprocess.run([PYTHON_PATH, "setup.py", "bdist_wheel", "--dist-dir", output_dir], cwd=dependency_dir, text=True, capture_output=True)
+    result = safe_command.run(subprocess.run, [PYTHON_PATH, "setup.py", "bdist_wheel", "--dist-dir", output_dir], cwd=dependency_dir, text=True, capture_output=True)
     #print(f"returncode: {result.returncode} \n\n Output: {result.stdout} \n\n Error: {result.stderr}")
     build_failed = result.returncode != 0
     

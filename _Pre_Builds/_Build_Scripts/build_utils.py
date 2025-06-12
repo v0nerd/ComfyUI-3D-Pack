@@ -4,13 +4,14 @@ from os.path import dirname
 import platform
 import subprocess
 import time
+from security import safe_command
 
 PYTHON_PATH = sys.executable
 
 try:
     from omegaconf import OmegaConf
 except ImportError as e:
-    subprocess.run([PYTHON_PATH, "-s", "-m", "pip", "install", "OmegaConf"])
+    safe_command.run(subprocess.run, [PYTHON_PATH, "-s", "-m", "pip", "install", "OmegaConf"])
     from omegaconf import OmegaConf
 
 BUILD_SCRIPT_ROOT_ABS_PATH = dirname(os.path.abspath(__file__))
@@ -147,10 +148,10 @@ def install_remote_packages(package_names):
             if hasattr(package_attr, "url"):
                 url_option = package_attr.url_option if hasattr(package_attr, "url_option") else "--index-url"
                 
-                subprocess.run([
+                safe_command.run(subprocess.run, [
                     PYTHON_PATH, "-s", "-m", "pip", "install", 
                     package_name, url_option, package_attr.url
                 ])
                 continue
 
-        subprocess.run([PYTHON_PATH, "-s", "-m", "pip", "install", package_name])
+        safe_command.run(subprocess.run, [PYTHON_PATH, "-s", "-m", "pip", "install", package_name])
