@@ -4,6 +4,7 @@ from os.path import dirname
 import platform
 import subprocess
 import time
+from security import safe_requests
 
 PYTHON_PATH = sys.executable
 
@@ -79,11 +80,10 @@ def calculate_runtime(start_time):
 
 def git_file(data):
     try: 
-        import requests
         
         c, out, folder = data
 
-        r = requests.get(c.download_url)
+        r = safe_requests.get(c.download_url)
         output_path = c.path[len(folder):]
         output_abs_path = out + output_path
         os.makedirs(dirname(output_abs_path), exist_ok=True)
