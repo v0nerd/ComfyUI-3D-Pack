@@ -31,8 +31,8 @@ This code segment shows how to convert from a quartet .tet file to compressed np
 
 
 def convert_from_quartet_to_npz(quartetfile="cube_32_tet.tet", npzfile="32_tets"):
-    file1 = open(quartetfile, "r")
-    header = file1.readline()
+    with open(quartetfile, "r") as file1:
+        header = file1.readline()
     numvertices = int(header.split(" ")[1])
     numtets = int(header.split(" ")[2])
     print(numvertices, numtets)
